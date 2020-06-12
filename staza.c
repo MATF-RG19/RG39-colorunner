@@ -1,5 +1,5 @@
 #include "colorunner.h" 
-
+extern GLuint textures[2];
 int blok_trenutni;
 BLOK baza_blokova[3];
 
@@ -207,13 +207,45 @@ void iscrtaj_polje(enum polje _polje)
 	}
 	else if(_polje == PROMENA)
 	{
-		osnova = bojaPromene;
-	 	glMaterialfv(GL_FRONT , GL_AMBIENT_AND_DIFFUSE, osnova);
-		glShadeModel(GL_SMOOTH);
+			glPushMatrix();
+			glScalef(polje_w, polje_h, polje_w);
+	 
+		glTranslatef(0,-0.5,0);
+				GLfloat vertices[] =
+		 {-0.5f, 0.0f, 0.5f,   0.5f, 0.0f, 0.5f,   0.5f, 1.0f, 0.5f,  -0.5f, 1.0f, 0.5f,
+			-0.5f, 1.0f, -0.5f,  0.5f, 1.0f, -0.5f,  0.5f, 0.0f, -0.5f, -0.5f, 0.0f, -0.5f,
+			0.5f, 0.0f, 0.5f,   0.5f, 0.0f, -0.5f,  0.5f, 1.0f, -0.5f,  0.5f, 1.0f, 0.5f,
+			-0.5f, 0.0f, -0.5f,  -0.5f, 0.0f, 0.5f,  -0.5f, 1.0f, 0.5f, -0.5f, 1.0f, -0.5f
+			};
 
-		glPushMatrix();
-		glScalef(polje_w, polje_h, polje_w);
-		glutSolidCube(1);
+		 GLfloat texcoords[] = { 0.0,0.0, 1.0,0.0, 1.0,1.0, 0.0,1.0,
+				                           0.0,0.0, 1.0,0.0, 1.0,1.0, 0.0,1.0,
+				                           0.0,0.0, 1.0,0.0, 1.0,1.0, 0.0,1.0,
+				                           0.0,0.0, 1.0,0.0, 1.0,1.0, 0.0,1.0
+				                         };
+
+		 GLubyte cubeIndices[24] = {0,1,2,3, 4,5,6,7, 3,2,5,4, 7,6,1,0,
+				                              8,9,10,11, 12,13,14,15};
+
+
+	 glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textures[1]);
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glColor3f(1.0f, 1.0f, 1.0f);
+
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_VERTEX_ARRAY);
+
+        glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+        glVertexPointer(3, GL_FLOAT, 0, vertices);
+
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cubeIndices);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        //glDisableClientState(GL_COLOR_ARRAY);
+        glDisable(GL_TEXTURE_2D);
+
 		glPopMatrix();
 	}
  
@@ -230,7 +262,7 @@ void iscrtaj_lopticu()
   glTranslatef(loptica.x * polje_w, loptica.y * polje_w, 0);
 	//animacija kotrljanja
 	glRotatef(-2.25*rotacija, 1, 0, 0);
-  glutSolidSphere(0.3, 10, 10);
+  glutSolidSphere(0.3+animacija_prolaska, 10, 10);
  
   glPopMatrix();
 }

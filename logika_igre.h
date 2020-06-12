@@ -29,6 +29,7 @@ extern bool igra_traje;
 extern bool igra_pauzirana;
 extern unsigned long long rezultat;
 extern int rotacija;
+extern GLfloat animacija_prolaska;
 extern int rezultat_timer;
 extern struct taster trenutni_taster;
 extern LOPTICA loptica;

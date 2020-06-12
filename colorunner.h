@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <GL/freeglut.h>
-	
+#include "image.h"
 
 #include "staza.h"
 #include "logika_igre.h"

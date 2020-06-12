@@ -29,6 +29,7 @@ int rezultat_timer;
 
 //za prikaz rotacije loptice
 int rotacija;
+GLfloat animacija_prolaska;
 
  
 struct taster trenutni_taster;
@@ -108,6 +109,12 @@ bool kolizija_na_polju(int i, int j)
 		}
   }
 
+	//animacija loptice koja raste kada prolazi kroz dobru prepreku
+	if((*trenutni_blok)[i][j] == CRVENA || (*trenutni_blok)[i][j] == ZELENA || (*trenutni_blok)[i][j] == PLAVA)
+			animacija_prolaska = animacija_prolaska + 0.025;
+	//ako nije na prepreci a prethodno je rasla, smanjujemo do nule
+	else if(animacija_prolaska > 0)
+			animacija_prolaska = animacija_prolaska - 0.025;
 	
   return true;
 }
@@ -187,10 +194,11 @@ void ucitaj_promenljive()
 
 
 	igra_traje = true;
-	igra_pauzirana = false;
+	igra_pauzirana = true;
 
 	rezultat = 0;
 	rezultat_timer = 0;
 	rotacija = 0;
+	animacija_prolaska = 0;
 }
 
